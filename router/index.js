@@ -7,6 +7,7 @@ exports.setRequestUrl=(app)=>{
     app.post("/user/register",user.register);   //注册
     app.post("/user/code",user.code);   //获取验证码
     app.post("/user/send_mailer",user.send_mailer);   //发送邮箱
+    app.post("/user/update",user.update);   //更新资料
 
     app.post("/project/project",project.project);  //添加项目
     app.get("/project/list",project.list);  //查询项目
