@@ -1,0 +1,5 @@
+node_modules/
+apidoc/
+public/uploads/
+public/static/
+package-lock.json
