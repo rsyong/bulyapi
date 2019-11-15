@@ -1,13 +1,13 @@
 /**
- * @api {post} /user/update 更新资料
+ * @api {post} /project/update 更新项目资料
  * @apiVersion 0.1.0
  * @apiName update
- * @apiGroup User
+ * @apiGroup project
  *
  * @apiParam {String}   userid   *用户ID
- * @apiParam {Number} phone 手机号
- * @apiParam {String}  head 头像
- * @apiParam {String}   username   用户名
+ * @apiParam {String}   project_id   *项目ID
+ * @apiParam {Number} project_name 项目名字
+ * @apiParam {String}  parject_img 项目图片
  *
  * @apiSuccessExample Response (example):
  *  {
@@ -25,23 +25,26 @@ module.exports=(req,send)=>{
         conn.end();
     }
     if(!body.userid) return toSend("0","缺少参数userid");
+    if(!body.project_id) return toSend("0","缺少参数project_id");
     conn.connect();
-    conn.query(`SELECT * FROM user where userid='${body.userid}'`,(err,res)=>{
+    conn.query(`SELECT * FROM project where project_id='${body.project_id}'`,(err,res)=>{
         if(err) return toSend("0","系统错误！");
-        if(res.length==0) return toSend("0","该用户未注册！");
+        if(res.length==0) return toSend("0","没有该项目！");
         if(res.length>0){
-            changeUser();
+            if(body.userid==res[0].project_user){
+                changeUser();
+            }else{
+                return toSend("0","只有创建者拥有权限修改！");
+            }
         }
     })
     const changeUser=()=>{
-        let sql=sqlold=`update user set `;
-        let {phone,head,username}=body;
-        if(phone){
-            sql+=`phone='${phone}',`;
-        }else if(head){
-            sql+=`head='${head}',`;
-        }else if(username){
-            sql+=`username='${username}',`;
+        let sql=sqlold=`update project set `;
+        let {project_name,parject_img}=body;
+        if(project_name){
+            sql+=`project_name='${project_name}',`;
+        }else if(parject_img){
+            sql+=`parject_img='${parject_img}',`;
         }
         if(sql==sqlold){
             return toSend("0","最少应有一项被修改");
@@ -49,7 +52,7 @@ module.exports=(req,send)=>{
         if(sql.lastIndexOf(",")>-1){
             sql=sql.substring(0,sql.length-1);
         }
-        sql+=` where userid='${body.userid}'`;
+        sql+=` where project_id='${body.project_id}'`;
         conn.query(sql,(err,res)=>{
             if(err) return toSend("0","系统错误！");
             toSend("1","修改成功！");

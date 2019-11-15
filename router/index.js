@@ -14,6 +14,7 @@ exports.setRequestUrl=(app)=>{
     app.get("/project/team",project.team);  //查询项目成员
     app.post("/project/invitation",project.invitation);  //添加项目成员
     app.post("/project/deletes",project.deletes);  //删除项目
+    app.post("/project/update",project.update);  //修改项目
     
     app.post("/bg/addbg",bg.addbg);  //添加bug记录
     app.get("/bg/list",bg.list);  //查询bug记录

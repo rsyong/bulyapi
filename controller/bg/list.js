@@ -4,31 +4,36 @@
  * @apiName 查询记录list
  * @apiGroup Bg
  *
- * @apiParam {String} project_id 项目id
+ * @apiParam {String} project_id *项目id
  * @apiParam {Number} type 类型 type=1我创建的 type=2 分配给我 type=3 紧急bug type=4最新bug  *传type=1、type=2必传userid
- * @apiParam {String} userid 用户id 
+ * @apiParam {String} userid 用户id
+ * @apiParam {Number} page 分页(不传显示全部)
  * @apiSuccessExample Response (example):
  *     {
-        "code": "1",
-        "msg": "查询成功！",
+    "code": "1",
+    "msg": "查询成功！",
+    "data": {
+        "allPage": 11, //总页数
+        "currentPage": "2", //当前页
         "data": [
             {
-                "id": 2,
-                "bg_id": "e7b79810052111ea81d001335ce64cfb",
+                "id": 11,
+                "bg_id": null,
                 "project_id": "9c99dc90051611eab17c0d4fd16d9c36",
-                "userid": "ec15313004f211ea8fd7c3887249b9f5",
-                "title": "测试bug",
-                "priority": 1,
-                "dealing_people": "d08ed60004f211ea8fd7c3887249b9f5",
-                "describes": "学生端顶部滑动会出现一根线条",
-                "type": 1,
-                "closing_date": "2019-11-19T16:00:00.000Z",
-                "severity": 3,
+                "userid": null,
+                "title": null,
+                "priority": null,
+                "dealing_people": null,
+                "describes": null,
+                "type": null,
+                "closing_date": null,
+                "severity": null,
                 "status": 0,
-                "time": "2019-11-13T01:53:39.000Z"
+                "time": "2019-11-15T06:15:48.000Z"
             }
         ]
     }
+}
  */
 const mysql = require('../../utils/mysql.config');
 module.exports = (req, send) => {
@@ -59,8 +64,23 @@ module.exports = (req, send) => {
                 break;
         }
     };
+    let sql2=sql.replace("*","count(1)");
+    const {page} =body;
+    if(page){
+        var start = (page - 1) * 10;
+        sql+=` limit ${start},10`;
+    }
     conn.query(sql, (err, res) => {
         if (err) return toSend("0", "系统错误！");
-        toSend("1", "查询成功！", res);
+        // 计算总页数
+        conn.query(sql2+" ; "+sql,(err,res2)=>{
+            if (err) return toSend("0", "系统错误！");
+            var allPage = res2[0]['count(1)'];
+            toSend("1", "查询成功！", {
+                allPage:allPage,
+                currentPage:page,
+                data:res
+            });
+        })
     })
 }
