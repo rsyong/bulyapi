@@ -18,5 +18,5 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use('/public',express.static('public'));
 router.setRequestUrl(app);
 app.listen(3001,()=>{
-    console.log("服务已启动");
+    console.log("服务已启动端口3001");
 })

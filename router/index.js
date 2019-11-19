@@ -21,4 +21,5 @@ exports.setRequestUrl=(app)=>{
     app.post("/bg/deletes",bg.deletes);  //删除bug记录
 
     app.post("/file/uploadImg",file.uploadImg);  //添加图片
+    app.post("/file/uploadfile",file.uploadfile);  //上传文件
 }
