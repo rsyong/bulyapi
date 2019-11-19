@@ -35,19 +35,22 @@ module.exports = (req, send) => {
                 }
             }
         }
-        Promise.all(filePath.forEach((item)=>{
-            new Promise((resolve,reject)=>{
-                let fileExt = item.substring(item.lastIndexOf('.'));
-                let targetDir = path.join(__dirname, '../../../public/uploads');
-                //以当前时间戳对上传文件进行重命名  
-                let fileName = new Date().getTime() + fileExt;
-                let targetFile = path.join(targetDir, fileName);
-                fs.rename(item,targetFile,(err,res)=>{
-                    if(err) return reject();
-                    resolve('/public/uploads/' + fileName);
+        let fors=[];
+        filePath.forEach((item)=>{
+            fors.push(
+                new Promise((resolve,reject)=>{
+                    let fileExt = item.substring(item.lastIndexOf('.'));
+                    let targetDir = path.join(__dirname, '../../../public/uploads');
+                    //以当前时间戳对上传文件进行重命名  
+                    let fileName = new Date().getTime() + fileExt;
+                    let targetFile = path.join(targetDir, fileName);
+                    fs.rename(item,targetFile,(err,res)=>{
+                        resolve('/public/uploads/' + fileName);
+                    })
                 })
-            })
-        })).then(res=>{
+            )
+        })
+        Promise.all(fors).then(res=>{
             return toSend("1","操作成功!",res);
         }).catch(err=>{
             if(err) return toSend("0","操作失败!",err);
