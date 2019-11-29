@@ -1,13 +1,8 @@
 /**
- * @api {post} /file/upload/img 上传图片
+ * @api {post} /file/upload/file 上传文件
  * @apiVersion 0.1.0
- * @apiName img
+ * @apiName file
  * @apiGroup File
- *
- * @apiParam {String} project_id 项目id
- * @apiSuccessExample Response (example):
- *  {
-    }
  */
 const fm = require('formidable');
 const path = require('path');
@@ -35,6 +30,7 @@ module.exports = (req, send) => {
                 }
             }
         }
+        if(filePath.length==0) return toSend("0","未上传文件！");
         let fors=[];
         filePath.forEach((item)=>{
             fors.push(

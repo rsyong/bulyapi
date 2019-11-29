@@ -41,7 +41,7 @@ module.exports=(req,send)=>{
             }else{
                 conn.query(`update user_code set code='${num}' where email='${body.email}'`,(err,res3)=>{
                     if(err) return toSend("0","系统错误！");
-                    sendMail.send(body.email,'用【'+num+'】作为你的验证码。',(err,info)=>{
+                    sendMail.send(body.email,'用【<b style="color:red">'+num+'</b>】作为你的验证码。',(err,info)=>{
                         if(err) return toSend("0","系统错误！");
                         toSend("1","发送成功！",info.response);
                     });

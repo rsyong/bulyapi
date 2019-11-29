@@ -4,7 +4,8 @@
  * @apiName login
  * @apiGroup User
  *
- * @apiParam {Number} phone 手机号
+ * @apiParam {String} email 邮箱
+ * @apiParam {String} phone 手机 可选  可用邮箱登录也可用手机号登录
  * @apiParam {String} password 密码
  *
  * @apiSuccess {String}   userid        用户ID
@@ -38,9 +39,18 @@ module.exports=(req,send)=>{
         send.json({code,msg,data});
         conn.end();
     }
-    if(!body.phone || !body.password) return toSend("0","缺少参数");
+    if(!body.email || !body.password) return toSend("0","缺少参数");
+    let sql='';
+    if(body.email){
+        if(!(/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(body.email))) return toSend("0","邮箱格式错误！");
+        sql=`SELECT * FROM user where email='${body.email}'`;
+    }else if(body.phone){
+        if(!(/^1[3456789]\d{9}$/.test(body.phone))) return toSend("0","手机号格式有误！");
+        sql=`SELECT * FROM user where phone='${body.phone}'`;
+    }
+    if(sql=='') return toSend("0","email或者手机号 必填一项！");
     conn.connect();
-    conn.query(`SELECT * FROM user where phone='${body.phone}'`,(err,res)=>{
+    conn.query(sql,(err,res)=>{
         if(err) return toSend("0","系统错误！");
         if(res.length==0) return toSend("0","该用户未注册！");
         if(res.length>0){

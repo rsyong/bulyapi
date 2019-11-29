@@ -3,7 +3,7 @@
     "version": "0.1.0",
     "description": "",
     "title": "bug管理API文档",
-    "url": "http://192.168.31.25:8005",
+    "url": "http://192.168.31.25:3001",
     "sampleUrl": "",
     "template": {
         "withCompare": true,

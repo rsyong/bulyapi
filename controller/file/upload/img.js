@@ -3,11 +3,6 @@
  * @apiVersion 0.1.0
  * @apiName img
  * @apiGroup File
- *
- * @apiParam {String} project_id 项目id
- * @apiSuccessExample Response (example):
- *  {
-    }
  */
 const fm = require('formidable');
 const path = require('path');
