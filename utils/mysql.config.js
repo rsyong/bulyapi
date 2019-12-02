@@ -1,8 +1,8 @@
 const mysql = require("mysql");
 const option = {
-    host: "localhost",
+    host: "cdb-gj0lltxm.bj.tencentcdb.com",
     user: 'root',
-    password: 'root',
+    password: 'rsyong950918',
     port: '3306',
     database: 'buly'
 }
