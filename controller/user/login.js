@@ -39,7 +39,7 @@ module.exports=(req,send)=>{
         send.json({code,msg,data});
         conn.end();
     }
-    if(!body.email || !body.password) return toSend("0","缺少参数");
+    if(!body.password) return toSend("0","缺少参数");
     let sql='';
     if(body.email){
         if(!(/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(body.email))) return toSend("0","邮箱格式错误！");
