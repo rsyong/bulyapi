@@ -2,6 +2,7 @@ const user=require('../controller/user');
 const project=require('../controller/project');
 const bg=require('../controller/bg');
 const file=require('../controller/file');
+const test=require('../controller/test/test');
 exports.setRequestUrl=(app)=>{
     app.post("/user/login",user.login);   //登录
     app.post("/user/register",user.register);   //注册
@@ -22,4 +23,6 @@ exports.setRequestUrl=(app)=>{
 
     app.post("/file/uploadImg",file.uploadImg);  //添加图片
     app.post("/file/uploadfile",file.uploadfile);  //上传文件
+
+    app.post("/test",test); //测试接口
 }

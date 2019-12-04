@@ -1,10 +1,10 @@
 /**
  * @api {post} /user/register 注册
  * @apiVersion 0.1.0
- * @apiName 注册
+ * @apiName register
  * @apiGroup User
  *
- * @apiParam {Number} phone 手机号
+ * @apiParam {Number} phone 手机号 可选
  * @apiParam {String} password 密码
  * @apiParam {String} username 用户名
  * @apiParam {String} email 邮箱
@@ -19,7 +19,10 @@ module.exports=(req,send)=>{
         send.json({code,msg,data});
         conn.end();
     }
-    if(!body.phone || !body.password || !body.username || !body.email || !body.code) return toSend("0","缺少参数");
+    if(!body.password || !body.username || !body.email || !body.code) return toSend("0","缺少参数");
+    if(!body.phone){
+        body.phone="";
+    }
     conn.connect();
     conn.query(`SELECT * FROM user where email='${body.email}'`,(err,res)=>{
         if(err) return toSend("0","系统错误！");
