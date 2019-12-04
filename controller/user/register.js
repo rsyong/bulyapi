@@ -30,6 +30,7 @@ module.exports=(req,send)=>{
         if(res.length==0){
             conn.query(`select code from user_code where email='${body.email}'`,(err,res2)=>{
                 if(err) return toSend("0","系统错误！");
+                if(res2.length==0) return toSend("0","请发送验证码！");
                 const {code} =res2[0];
                 if(code!=body.code) return toSend("0","验证码错误！");
                 conn.query(`INSERT INTO user (userid,phone,password,email,username) VALUES (
