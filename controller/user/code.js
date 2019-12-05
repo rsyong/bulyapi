@@ -19,6 +19,7 @@
 const mysql=require('../../utils/mysql.config');
 var iHuyi = require("../../utils/ihuyi");
 var i = new iHuyi('C81507877','b69f8e2c6aa288e33484593394a8264c');
+const By=require('../../utils/By');
 module.exports=(req,send)=>{
     const body=req.body;
     const conn=mysql.init();
@@ -27,6 +28,7 @@ module.exports=(req,send)=>{
         conn.end();
     }
     if(!body.phone) return toSend("0","缺少参数");
+    if(!By.isTelCode(body.phone)) return toSend("0","手机号格式有误");
     conn.connect();
     conn.query(`SELECT * FROM user where phone='${body.phone}'`,(err,res)=>{
         if(err) return toSend("0","系统错误！");

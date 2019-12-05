@@ -5,6 +5,23 @@
  * @apiGroup project
  *
  * @apiParam {String} userid 用户id
+ * @apiSuccessExample Response (example):
+ * {
+    "code": "1",
+    "msg": "查询成功！",
+    "data": [
+        {
+            "id": 2,
+            "project_name": "测试", //项目名字
+            "project_user": "ec15313004f211ea8fd7c3887249b9f5", //创建者
+            "username": "test", //创建者名字
+            "project_id": "48e51f7004f711ea8ddead8f4671599b", //项目id
+            "parject_team": "ec15313004f211ea8fd7c3887249b9f5",
+            "parject_img": null, //项目图片
+            "time": "2019-12-02T07:31:10.000Z"
+        }
+    ]
+}
  */
 const mysql=require('../../utils/mysql.config');
 module.exports=(req,send)=>{

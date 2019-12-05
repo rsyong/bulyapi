@@ -7,7 +7,8 @@
  * @apiParam {String}   userid   *用户ID
  * @apiParam {Number} phone 手机号
  * @apiParam {String}  head 头像
- * @apiParam {String}   username   用户名
+ * @apiParam {String}  username   用户名
+ * @apiParam {String}  password   密码
  *
  * @apiSuccessExample Response (example):
  *  {
@@ -17,6 +18,7 @@
     }
  */
 const mysql=require('../../utils/mysql.config');
+const By=require('../../utils/By');
 module.exports=(req,send)=>{
     const body=req.body;
     const conn=mysql.init();
@@ -35,13 +37,18 @@ module.exports=(req,send)=>{
     })
     const changeUser=()=>{
         let sql=sqlold=`update user set `;
-        let {phone,head,username}=body;
+        let {phone,head,username,password}=body;
         if(phone){
+            if(!By.isTelCode(phone)) return toSend("0","手机号格式有误！");
             sql+=`phone='${phone}',`;
         }else if(head){
             sql+=`head='${head}',`;
         }else if(username){
+            if(username.length<4) return toSend("0","用户名至少4位");
             sql+=`username='${username}',`;
+        }else if(password){
+            if(password.length<6) return toSend("0","密码至少6位");
+            sql+=`password='${password}',`;
         }
         if(sql==sqlold){
             return toSend("0","最少应有一项被修改");

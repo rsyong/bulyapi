@@ -11,7 +11,7 @@
  * @apiParam {String} code 验证码
  */
 const mysql=require('../../utils/mysql.config');
-const UUID = require('uuid');
+const By=require('../../utils/By');
 module.exports=(req,send)=>{
     const body=req.body;
     const conn=mysql.init();
@@ -23,6 +23,9 @@ module.exports=(req,send)=>{
     if(!body.phone){
         body.phone="";
     }
+    if(!By.IsEmail(body.email)) return toSend("0","邮箱格式有误！");
+    if(body.password.length<6) return toSend("0","密码最少6位！");
+    if(body.username.length<4) return toSend("0","用户名最少4位！");
     conn.connect();
     conn.query(`SELECT * FROM user where email='${body.email}'`,(err,res)=>{
         if(err) return toSend("0","系统错误！");
@@ -34,7 +37,7 @@ module.exports=(req,send)=>{
                 const {code} =res2[0];
                 if(code!=body.code) return toSend("0","验证码错误！");
                 conn.query(`INSERT INTO user (userid,phone,password,email,username) VALUES (
-                    '${UUID.v1().replace(/-/g,'')}','${body.phone}','${body.password}','${body.email}','${body.username}')`,(err,res)=>{
+                    '${By.uuid()}','${body.phone}','${body.password}','${body.email}','${body.username}')`,(err,res)=>{
                     if(err) return toSend("0","系统错误！");
                     toSend("1","注册成功！");
                 })

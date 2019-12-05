@@ -14,6 +14,7 @@
  */
 const mysql=require('../../utils/mysql.config');
 const sendMail=require('../../utils/sendMail');
+const By=require('../../utils/By');
 module.exports=(req,send)=>{
     const body=req.body;
     const conn=mysql.init();
@@ -22,6 +23,7 @@ module.exports=(req,send)=>{
         conn.end();
     }
     if(!body.email) return toSend("0","缺少参数");
+    if(!By.IsEmail(body.email)) return toSend("0","邮箱格式有误！");
     conn.connect();
     conn.query(`SELECT * FROM user where email='${body.email}'`,(err,res)=>{
         if(err) return toSend("0","系统错误！");

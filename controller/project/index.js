@@ -4,11 +4,15 @@ const team=require('./team');
 const invitation=require('./invitation');
 const deletes=require('./delete');
 const update=require('./update');
+const delete_team=require('./delete_team');
+const exit_project=require('./exit_project');
 module.exports={
     project,
     list,
     team,
     invitation,
     deletes,
-    update
+    update,
+    delete_team,
+    exit_project
 }

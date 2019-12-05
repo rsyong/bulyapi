@@ -6,9 +6,15 @@
  *
  * @apiParam {String} project_name 项目名
  * @apiParam {String} userid 用户id
+ * @apiSuccessExample Response (example):
+ * {
+    "code": "1",
+    "msg": "添加成功！",
+    "data": []
+    }
  */
 const mysql = require('../../utils/mysql.config');
-const UUID = require('uuid');
+const By=require('../../utils/By');
 module.exports = (req, send) => {
     const body = req.body;
     const conn = mysql.init();
@@ -22,7 +28,7 @@ module.exports = (req, send) => {
         if (err) return toSend("0", "系统错误！");
         if (res.length > 0) {
             conn.query(`INSERT INTO project (project_name,project_user,username,project_id,parject_team,parject_img) VALUES (
-                '${body.project_name}','${body.userid}','${res[0].username}','${UUID.v1().replace(/-/g, "")}','${body.userid}','${body.img || ""}'
+                '${body.project_name}','${body.userid}','${res[0].username}','${By.uuid()}','${body.userid}','${body.img || ""}'
             )`, (err, res) => {
                 if (err) return toSend("0", "系统错误！");
                 return toSend("1", "添加成功！");

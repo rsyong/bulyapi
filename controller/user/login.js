@@ -32,6 +32,7 @@
         }
  */
 const mysql=require('../../utils/mysql.config');
+const By=require('../../utils/By');
 module.exports=(req,send)=>{
     const body=req.body;
     const conn=mysql.init();
@@ -42,10 +43,10 @@ module.exports=(req,send)=>{
     if(!body.password) return toSend("0","缺少参数");
     let sql='';
     if(body.email){
-        if(!(/^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/.test(body.email))) return toSend("0","邮箱格式错误！");
+        if(!By.IsEmail(body.email)) return toSend("0","邮箱格式错误！");
         sql=`SELECT * FROM user where email='${body.email}'`;
     }else if(body.phone){
-        if(!(/^1[3456789]\d{9}$/.test(body.phone))) return toSend("0","手机号格式有误！");
+        if(!By.isTelCode(body.phone)) return toSend("0","手机号格式有误！");
         sql=`SELECT * FROM user where phone='${body.phone}'`;
     }
     if(sql=='') return toSend("0","email或者手机号 必填一项！");
