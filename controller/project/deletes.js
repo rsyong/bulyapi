@@ -26,7 +26,13 @@ module.exports = (req, send) => {
     conn.query(`delete from project where project_id='${body.project_id}' and project_user='${body.userid}'`,(err,res)=>{
         if(err) return toSend("0","系统错误！");
         if(res.affectedRows>0){
-            toSend("1","删除成功！");
+            conn.query(`delete from bg where project_id='${body.project_id}'`,(err,res)=>{
+                if(err)  return toSend("0","系统错误！");
+                conn.query(`delete from bg_old where project_id='${body.project_id}'`,(err,res)=>{
+                    if(err)  return toSend("0","系统错误！");
+                    return toSend("1","删除成功");
+                });
+            });
         }else{
             toSend("0","删除失败或者没有权限!");
         }
